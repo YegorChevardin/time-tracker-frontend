@@ -1,8 +1,10 @@
 import TrackedTimeList from "./timetracker/TrackedTimeList";
+import CheckAuth from "../auth/CheckAuth";
 
 function TimeTrack() {
     return (
         <>
+            <CheckAuth/>
             <div className="mb-5">
                 <TrackedTimeList/>
                 <div className="mt-5">

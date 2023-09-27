@@ -4,7 +4,7 @@ import {useEffect} from "react";
 
 function CheckAuth() {
     const navigate = useNavigate();
-    const apiAuthPath = process.env.REACT_APP_API_URL + "/";
+    const apiAuthPath = process.env.REACT_APP_API_URL + "/api/v1/users/user";
 
     const checkToken = async (authToken) => {
         try {

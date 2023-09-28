@@ -113,7 +113,7 @@ function LoginPage() {
                     <div className="col-md-5">
                         <div className="form-signin w-100 m-auto">
                             <form className="d-flex flex-column gap-2">
-                                <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
+                                <h1 className="h3 mb-3 fw-normal">Please sign in or <Link to="/register">register</Link></h1>
 
                                 <div className="form-floating">
                                     <input type="text" name="username" className="form-control" id="floatingInput"

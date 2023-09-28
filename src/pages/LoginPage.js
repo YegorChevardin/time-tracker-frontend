@@ -78,6 +78,7 @@ function LoginPage() {
     useEffect(() => {
         if (token !== null && token !== undefined) {
             localStorage.setItem("authToken", token.toString());
+            localStorage.setItem("userId", loginServerData.user.id)
             alert("Login was successful, just press 'Track time' button!")
             setSuccessLogin(true);
         }

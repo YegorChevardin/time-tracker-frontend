@@ -4,7 +4,7 @@ import {useEffect} from "react";
 
 function CheckAuth() {
     const navigate = useNavigate();
-    const apiAuthPath = process.env.REACT_APP_API_URL + "/api/v1/users/user";
+    const apiAuthPath = process.env.REACT_APP_API_URL + "/users/user";
 
     const checkToken = async (authToken) => {
         try {
@@ -13,18 +13,15 @@ function CheckAuth() {
                     Authorization: authToken
                 }
             });
-            console.log(response);
             if (response.status !== 200) {
                 throw new Error();
             }
+            localStorage.setItem("userId", response.data.id);
         } catch (error) {
-            console.log(error);
-            let message = "Something went wrong, try to login again!";
-            if (error.hasOwnProperty("response") && error.response.hasOwnProperty("data")) {
-                message = error.response.data;
-            }
+            let message = "Session time out! Log in to the system again!";
             alert(message);
             localStorage.removeItem("authToken");
+            localStorage.removeItem("userId")
             navigate("/login");
         }
     };

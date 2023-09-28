@@ -1,4 +1,55 @@
+import {useEffect, useState} from "react";
+import axios from "axios";
+import TrackedTimeListElement from "./TrackedTimeListElement";
+import {useNavigate} from "react-router-dom";
+
 function TrackedTimeList() {
+    const navigate = useNavigate();
+    const listUrl = process.env.REACT_APP_API_URL + "/tracked-times";
+    const [trackedTimeList, setTrackedTimeList] = useState([]);
+    const [deleteAction, setDeleteAction] = useState(false);
+
+    const loadTrackedTimes = async (token, userId) => {
+        try {
+            const response = await axios.get(listUrl, {
+                params: {
+                    userId: userId
+                },
+                headers: {
+                    Authorization: token
+                }
+            });
+            if (response.status !== 200) {
+                throw new Error();
+            }
+            setTrackedTimeList(response.data);
+        } catch (error) {
+            console.log(error);
+            let message = "Session time out! Log in to the system again!";
+            alert(message);
+        }
+    }
+
+    useEffect(() => {
+        getElements();
+    }, [deleteAction]);
+
+    useEffect(() => {}, [trackedTimeList])
+
+    useEffect(() => {
+        getElements();
+    }, []);
+
+    function getElements() {
+        const authToken = localStorage.getItem("authToken");
+        const userId = localStorage.getItem("userId");
+        if (authToken !== null && authToken !== undefined && authToken !== "") {
+            loadTrackedTimes(authToken, userId).then();
+        } else {
+            navigate("/login");
+        }
+    }
+
     return (
         <>
             <div className="table-responsive">
@@ -13,33 +64,7 @@ function TrackedTimeList() {
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Some</td>
-                        <td>03.04.2004</td>
-                        <td>03.05.2004</td>
-                        <td>
-                            <button className="btn btn-sm btn-outline-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Some</td>
-                        <td>03.04.2004</td>
-                        <td>03.05.2004</td>
-                        <td>
-                            <button className="btn btn-sm btn-outline-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Some</td>
-                        <td>03.04.2004</td>
-                        <td>03.05.2004</td>
-                        <td>
-                            <button className="btn btn-sm btn-outline-danger">Delete</button>
-                        </td>
-                    </tr>
+                    {trackedTimeList.map(element => (<TrackedTimeListElement key={element.id} deleteAction={deleteAction} setDeleteAction={setDeleteAction} {...element}/>))}
                     </tbody>
                 </table>
             </div>
